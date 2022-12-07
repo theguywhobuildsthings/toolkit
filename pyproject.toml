@@ -1,12 +1,13 @@
 [tool.poetry]
 name = "toolkit"
-version = "0.1.0"
+version = "0.0.1"
 description = ""
 authors = ["theguywhobuildsthings <theguywhobuildsthings@test.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.10"
+Django = "^4.1.4"
 
 
 [build-system]
