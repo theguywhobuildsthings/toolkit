@@ -3,9 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Dom-View</title>
+<title>Dom-View {{ name }}</title>
 </head>
 <body>
-  <h1>Dom-View</h1>
+  <h1>Dom-View {{ name }}</h1>
+  {{ svg|safe }}
+  <br/>
+  {{ data }}
+  <!-- <img src="data:image/png;base64, {{ code }}" alt="Red dot" /> -->
 </body>
 </html>
