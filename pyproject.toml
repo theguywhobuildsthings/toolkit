@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "toolkit"
+name = "dom"
 version = "0.0.1"
 description = ""
 authors = ["theguywhobuildsthings <theguywhobuildsthings@test.com>"]
