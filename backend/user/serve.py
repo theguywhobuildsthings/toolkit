@@ -14,9 +14,9 @@ from backend.auth.serve import get_current_user
 router = APIRouter(prefix="/user",)
 
 @router.post("/", response_model=User)
-async def create_user(form_data: UserCreate = Depends()):
+async def create_user(user: UserCreate):
     user_repository = UserRepository()
-    user = user_repository.create_user(form_data)
+    user = user_repository.create_user(user)
     return User(username=user.username, id=user.id)
 
 @router.get("/", response_model=User)

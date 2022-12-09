@@ -2,7 +2,7 @@
   <div class="layout">
     <nav-bar class="sticky"></nav-bar>
     <router-view
-      class="main flex relative mx-0 md:mx-32 my-3 overflow-x-hidden overflow-y-auto text-contrast dark:base"
+      class="main flex z-10 relative mx-0 md:mx-32 my-3 overflow-x-hidden overflow-y-auto text-contrast dark:base"
     />
     <footer-bar></footer-bar>
   </div>

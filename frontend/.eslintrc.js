@@ -18,6 +18,7 @@ module.exports = {
     "vue/multi-word-component-names": "off",
     "vue/return-in-computed-property": "off",
     "vue/no-async-in-computed-properties": "off",
+    "@typescript-eslint/no-explicit-any": "off",
   },
   overrides: [
     {
