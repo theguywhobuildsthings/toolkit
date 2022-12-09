@@ -33,14 +33,13 @@
 
 <style scoped>
 .decorator {
-  position: absolute;
+  position: fixed;
+  bottom: 0px;
 }
 
 .decorator-container {
   width: 100%;
-  bottom: 0px;
-  height: 7em;
-  position: fixed;
+  position: absolute;
   vertical-align: middle;
   overflow: hidden;
 }

@@ -15,7 +15,7 @@
           Sign in to your account
         </h2>
       </div>
-      <form class="mt-8 space-y-6" action="#" method="POST">
+      <form class="mt-8 space-y-6" :action="`${url}/auth/token`" method="POST">
         <input type="hidden" name="remember" value="true" />
         <div class="-space-y-px rounded-md shadow-sm">
           <div>
@@ -74,6 +74,11 @@ export default defineComponent({
   name: "SignIn",
   props: {
     msg: String,
+  },
+  data: () => {
+    return {
+      url: "http://localhost:8000",
+    };
   },
 });
 </script>
