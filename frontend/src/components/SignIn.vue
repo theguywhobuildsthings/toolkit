@@ -12,7 +12,7 @@
         <h2
           class="mt-6 text-center text-3xl font-bold tracking-tight text-contrast"
         >
-          Create Your Account
+          Sign in to your account
         </h2>
       </div>
       <form class="mt-8 space-y-6" action="#" method="POST">
@@ -38,31 +38,19 @@
               type="password"
               autocomplete="current-password"
               required
-              class="relative block w-full appearance-none rounded-none rounded-b-none border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
-              placeholder="Password"
-            />
-          </div>
-          <div>
-            <label for="password" class="sr-only">Password</label>
-            <input
-              id="confirm-password"
-              name="confirm-password"
-              type="password"
-              autocomplete="current-password"
-              required
               class="relative block w-full appearance-none rounded-none rounded-b-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
-              placeholder="Confirm Password"
+              placeholder="Password"
             />
           </div>
         </div>
 
         <div class="flex items-center justify-center">
           <div class="text-sm">
-            <label>Already have an account?&nbsp;&nbsp;&nbsp;</label>
+            <label>Don't have an account?&nbsp;&nbsp;&nbsp;</label>
             <router-link
-              to="/sign-in"
+              to="/sign-up"
               class="font-medium text-indigo-600 hover:text-indigo-500 justify-end"
-              >Sign in</router-link
+              >Sign up</router-link
             >
           </div>
         </div>
