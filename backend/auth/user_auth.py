@@ -1,0 +1,34 @@
+from backend.models.user.user_repository import UserRepository
+from backend.models.user.user import User
+
+from passlib.context import CryptContext
+
+class UserAuth:
+    username: str
+    password: str
+    user: User
+    context: CryptContext
+
+    def __init__(self, username: str, unhashed_pass: str):
+        self.username = username
+        self.password = unhashed_pass
+        user_repository = UserRepository()
+        self.user = user_repository.get_user_by_username(self.username)
+        self.context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+
+    def verify_password(self, plain_password: str, hashed_password: str):
+        return self.context.verify(plain_password, hashed_password)
+
+
+    def get_password_hash(self, password: str):
+        return self.context.hash(password)
+
+    def __authenticate(self) -> bool:
+        return self.verify_password(self.password, self.user.password)
+
+    def get_authenticated_user(self) ->  User:
+        if self.user == None or not self.__authenticate():
+            return None
+        return self.user
+
+        
