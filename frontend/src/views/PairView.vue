@@ -6,7 +6,7 @@
       <h2
         class="mt-6 text-center text-3xl font-bold tracking-tight text-contrast md:pb-8"
       >
-        Scan the QR code with your device.
+        Scan the QR code.
       </h2>
       <div class="justify-center">
         <qrcode-vue
@@ -18,7 +18,11 @@
       </div>
       <div class="flex items-center justify-center md:pt-8">
         <div class="text-sm">
-          <label>Or have them enter the code into the app:</label>
+          <label
+            >Or have them enter the code into the
+            <a href="#" class="underline text-strong hover:text-contrast">app</a
+            >:</label
+          >
         </div>
       </div>
       <div class="flex items-center justify-center">
