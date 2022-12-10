@@ -4,7 +4,7 @@
   >
     <div class="w-full max-w-md justify-center">
       <h2
-        class="mt-6 text-center text-3xl font-bold tracking-tight text-contrast md:pb-8"
+        class="mt-6 text-center text-3xl font-bold tracking-tight text-contrast pb-8"
       >
         Scan the QR code.
       </h2>
@@ -16,7 +16,7 @@
           level="H"
         ></qrcode-vue>
       </div>
-      <div class="flex items-center justify-center md:pt-8">
+      <div class="flex items-center justify-center pt-8">
         <div class="text-sm">
           <label
             >Or have them enter the code into the
