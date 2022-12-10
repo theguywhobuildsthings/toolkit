@@ -45,7 +45,7 @@ export default defineComponent({
     return {
       qrDataValue: "",
       helpValue: "",
-      connection: {} as WebSocket
+      connection: {} as WebSocket,
     };
   },
   methods: {
@@ -106,11 +106,12 @@ export default defineComponent({
     };
   },
   beforeUnmount() {
-    try{
-      console.log("trying to close connection")
-      this.connection.close()
+    try {
+      console.log("trying to close connection");
+      this.connection.close();
+    } catch {
+      console.log("Unable to close connection");
     }
-    catch {}
-  }
+  },
 });
 </script>

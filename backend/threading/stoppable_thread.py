@@ -5,6 +5,9 @@ import redis
 import os
 import json
 import asyncio
+import logging
+
+logger = logging.getLogger('output')
 
 class StoppableThread(threading.Thread):
     id: str
@@ -15,10 +18,8 @@ class StoppableThread(threading.Thread):
         self.cb = cb
         self.id = id
         self._stop_event = threading.Event()
-        print(f"Just made thread, stopped: {self.stopped()}")
 
     def stop(self):
-        print("setting stop event")
         self._stop_event.set()
 
     def stopped(self):
@@ -31,7 +32,7 @@ class StoppableThread(threading.Thread):
         while True:
             message = channel.get_message()
             if message and message is not None and isinstance(message, dict):
-                print(message.get('data') )
+                logger.debug(f'Received message: { message.get("data") } ')
                 if message['type'] == 'message':
                     decoded_data = json.loads(message.get('data').decode("utf-8"))
                     if decoded_data['message'] == 'pair-confirm':
@@ -43,6 +44,6 @@ class StoppableThread(threading.Thread):
                     if 'exit_flow' in decoded_data and decoded_data['exit_flow'] == True:
                         return
             if self.stopped():
-                print("Thread is dying")
+                logger.debug(f'Detected stop for thread {self.id}, dying')
                 return
             time.sleep(0.1)

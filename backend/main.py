@@ -2,13 +2,25 @@ from backend.auth.serve import router as auth_router
 from backend.user.serve import router as user_router
 from backend.pair.serve import router as pair_router
 
-from fastapi import Depends, FastAPI
+from fastapi import FastAPI
 from backend.models.user import user
 from backend.db import database
-from fastapi.security import OAuth2PasswordBearer
 from fastapi.middleware.cors import CORSMiddleware
+import logging
 
 user.Base.metadata.create_all(bind=database.engine)
+
+def setup_custom_logger():
+    formatter = logging.Formatter(fmt='%(asctime)s - %(levelname)s - %(module)s - %(message)s')
+
+    handler = logging.StreamHandler()
+    handler.setFormatter(formatter)
+
+    logger = logging.getLogger('output')
+    logger.setLevel(logging.DEBUG)
+    logger.addHandler(handler)
+    logger.info("Initialized App")
+
 
 origins = [
     "http://localhost.tiangolo.com",
@@ -30,3 +42,5 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+setup_custom_logger()
