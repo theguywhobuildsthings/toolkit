@@ -38,9 +38,10 @@
       </button>
       <div class="hidden w-full md:block md:w-auto" id="navbar-default">
         <ul
+          v-if="!loggedIn"
           class="flex flex-col p-4 mt-4 border border-gray-100 rounded-lg bg-base md:flex-row md:space-x-8 md:mt-0 md:text-sm md:font-medium md:border-0 md:base dark:base md:dark:base dark:border-gray-700"
         >
-          <li v-if="!loggedIn">
+          <li>
             <router-link
               class="block py-2 pl-3 pr-4 text-contrast bg-base rounded md:bg-transparent md:text-contrast md:p-0 dark:text-white hover:bg-base2"
               aria-current="page"
@@ -48,7 +49,20 @@
               >Sign In</router-link
             >
           </li>
-          <li v-if="loggedIn">
+        </ul>
+        <ul
+          v-if="loggedIn"
+          class="flex flex-col p-4 mt-4 border border-gray-100 rounded-lg bg-base md:flex-row md:space-x-8 md:mt-0 md:text-sm md:font-medium md:border-0 md:base dark:base md:dark:base dark:border-gray-700"
+        >
+          <li>
+            <router-link
+              class="block py-2 pl-3 pr-4 text-contrast bg-base rounded md:bg-transparent md:text-contrast md:p-0 dark:text-white hover:bg-base2"
+              aria-current="page"
+              to="/pair"
+              >Pair Device</router-link
+            >
+          </li>
+          <li>
             <a
               class="block py-2 pl-3 pr-4 text-contrast bg-base rounded md:bg-transparent md:text-contrast md:p-0 dark:text-white hover:bg-base2"
               aria-current="page"

@@ -1,5 +1,6 @@
 import { createRouter, createWebHashHistory, RouteRecordRaw } from "vue-router";
 import HomeView from "../views/HomeView.vue";
+import PairView from "../views/PairView.vue";
 import { checkToken } from "@/utils/auth";
 
 const routes: Array<RouteRecordRaw> = [
@@ -9,9 +10,9 @@ const routes: Array<RouteRecordRaw> = [
     component: HomeView,
   },
   {
-    path: "/about",
-    name: "about",
-    component: HomeView,
+    path: "/pair",
+    name: "pair",
+    component: PairView,
     meta: {
       requiresAuth: true,
     },

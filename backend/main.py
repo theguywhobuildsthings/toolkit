@@ -1,5 +1,6 @@
 from backend.auth.serve import router as auth_router
 from backend.user.serve import router as user_router
+from backend.pair.serve import router as pair_router
 
 from fastapi import Depends, FastAPI
 from backend.models.user import user
@@ -19,6 +20,7 @@ app = FastAPI()
 
 app.include_router(auth_router)
 app.include_router(user_router)
+app.include_router(pair_router)
 
 app.add_middleware(
     CORSMiddleware,

@@ -17,6 +17,8 @@ passlib = {extras = ["bcrypt"], version = "^1.7.4"}
 self = "^2020.12.3"
 poetry-dotenv-plugin = "^0.1.0"
 sqlalchemy = "^1.4.44"
+websockets = "^10.4"
+redis = "^4.4.0"
 
 
 [build-system]
