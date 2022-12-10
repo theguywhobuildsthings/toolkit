@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 
-poetry run uvicorn backend.main:app --reload
+poetry run uvicorn --host 0.0.0.0 backend.main:app --reload
