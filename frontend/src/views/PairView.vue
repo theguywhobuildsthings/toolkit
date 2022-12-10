@@ -4,17 +4,27 @@
   >
     <div class="w-full max-w-md justify-center">
       <h2
-        class="mt-6 text-center text-3xl font-bold tracking-tight text-contrast"
+        class="mt-6 text-center text-3xl font-bold tracking-tight text-contrast md:pb-8"
       >
         Scan the QR code with your device.
       </h2>
       <div class="justify-center">
         <qrcode-vue
           class="border-2 justify-center m-auto w-full"
-          size="200"
+          :size="200"
           :value="qrDataValue"
           level="H"
         ></qrcode-vue>
+      </div>
+      <div class="flex items-center justify-center md:pt-8">
+        <div class="text-sm">
+          <label>Or have them enter the code into the app:</label>
+        </div>
+      </div>
+      <div class="flex items-center justify-center">
+        <div class="text-sm">
+          <label>{{helpValue}}</label>
+        </div>
       </div>
     </div>
   </div>
@@ -34,6 +44,7 @@ export default defineComponent({
   data: () => {
     return {
       qrDataValue: "",
+      helpValue: ""
     };
   },
   methods: {
@@ -41,12 +52,22 @@ export default defineComponent({
       console.log(`Updating qr data ${val}`);
       this.qrDataValue = val;
     },
+    updateHelpTextValue(val: string) {
+      console.log(`Updating help data ${val}`);
+      this.helpValue = val;
+    },
   },
 
   created: function () {
     const setQrValue = (val: string) => {
       this.updateQRData(val);
     };
+    const setHelpTextValue = (val: string) => {
+      this.updateHelpTextValue(val);
+    };
+    const forwardToDevices = () => {
+      this.$router.push({name: 'devices'});
+    }
     console.log("Starting connection to WebSocket Server");
     const token = this.$store.getters.token;
     const connection = new WebSocket(`ws://localhost:8000/pair/${token}`);
@@ -71,11 +92,15 @@ export default defineComponent({
       const reqData = JSON.parse(event.data);
       console.log(reqData);
       if (reqData.message == "pair-info") {
-        console.log("here");
         setQrValue(
           `${process.env.VUE_APP_BACKEND_URL}${reqData.data.pair_url_path}`
         );
-        // element.qrCodeUrl = JSON.stringify(reqData.data);
+        setHelpTextValue(
+          `${reqData.data.uuid}`
+        )
+      }
+      if (reqData.message == "pair-complete") {
+        forwardToDevices()
       }
       console.log(reqData);
     };

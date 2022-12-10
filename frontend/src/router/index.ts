@@ -1,6 +1,7 @@
 import { createRouter, createWebHashHistory, RouteRecordRaw } from "vue-router";
 import HomeView from "../views/HomeView.vue";
 import PairView from "../views/PairView.vue";
+import DevicesView from "../views/DevicesView.vue";
 import { checkToken } from "@/utils/auth";
 
 const routes: Array<RouteRecordRaw> = [
@@ -13,6 +14,14 @@ const routes: Array<RouteRecordRaw> = [
     path: "/pair",
     name: "pair",
     component: PairView,
+    meta: {
+      requiresAuth: true,
+    },
+  },
+  {
+    path: "/devices",
+    name: "devices",
+    component: DevicesView,
     meta: {
       requiresAuth: true,
     },

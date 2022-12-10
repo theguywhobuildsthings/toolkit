@@ -9,6 +9,7 @@ from fastapi.security import OAuth2PasswordBearer
 from fastapi.middleware.cors import CORSMiddleware
 
 user.Base.metadata.create_all(bind=database.engine)
+
 origins = [
     "http://localhost.tiangolo.com",
     "https://localhost.tiangolo.com",
