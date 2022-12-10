@@ -58,6 +58,14 @@
             <router-link
               class="block py-2 pl-3 pr-4 text-contrast bg-base rounded md:bg-transparent md:text-contrast md:p-0 dark:text-white hover:bg-base2"
               aria-current="page"
+              to="/devices"
+              >Devices</router-link
+            >
+          </li>
+          <li>
+            <router-link
+              class="block py-2 pl-3 pr-4 text-contrast bg-base rounded md:bg-transparent md:text-contrast md:p-0 dark:text-white hover:bg-base2"
+              aria-current="page"
               to="/pair"
               >Pair Device</router-link
             >

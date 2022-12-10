@@ -23,7 +23,7 @@
       </div>
       <div class="flex items-center justify-center">
         <div class="text-sm">
-          <label>{{helpValue}}</label>
+          <label>{{ helpValue }}</label>
         </div>
       </div>
     </div>
@@ -44,7 +44,8 @@ export default defineComponent({
   data: () => {
     return {
       qrDataValue: "",
-      helpValue: ""
+      helpValue: "",
+      connection: {} as WebSocket
     };
   },
   methods: {
@@ -66,11 +67,12 @@ export default defineComponent({
       this.updateHelpTextValue(val);
     };
     const forwardToDevices = () => {
-      this.$router.push({name: 'devices'});
-    }
+      this.$router.push({ name: "devices" });
+    };
     console.log("Starting connection to WebSocket Server");
     const token = this.$store.getters.token;
-    const connection = new WebSocket(`ws://localhost:8000/pair/${token}`);
+    let connection = this.connection;
+    connection = new WebSocket(`ws://localhost:8000/pair/${token}`);
 
     connection.onopen = function () {
       connection.send(
@@ -95,15 +97,20 @@ export default defineComponent({
         setQrValue(
           `${process.env.VUE_APP_BACKEND_URL}${reqData.data.pair_url_path}`
         );
-        setHelpTextValue(
-          `${reqData.data.uuid}`
-        )
+        setHelpTextValue(`${reqData.data.uuid}`);
       }
       if (reqData.message == "pair-complete") {
-        forwardToDevices()
+        forwardToDevices();
       }
       console.log(reqData);
     };
   },
+  beforeUnmount() {
+    try{
+      console.log("trying to close connection")
+      this.connection.close()
+    }
+    catch {}
+  }
 });
 </script>
