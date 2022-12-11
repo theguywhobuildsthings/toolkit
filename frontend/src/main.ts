@@ -7,10 +7,6 @@ import mixinTitle from "./mixins/title";
 import axios from "axios";
 import VueAxios from "vue-axios";
 
-const token = localStorage.auth_header;
-if (token) {
-  axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-}
 
 const app = createApp(App);
 

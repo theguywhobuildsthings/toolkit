@@ -19,8 +19,15 @@ poetry-dotenv-plugin = "^0.1.0"
 sqlalchemy = "^1.4.44"
 websockets = "^10.4"
 redis = "^4.4.0"
+pytest = "^7.2.0"
+httpx = "^0.23.1"
 
 
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.pytest.ini_options]
+addopts = [
+    "--import-mode=importlib",
+]

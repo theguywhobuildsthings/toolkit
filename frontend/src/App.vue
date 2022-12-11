@@ -19,6 +19,16 @@ export default defineComponent({
     NavBar,
     FooterBar,
   },
+  mounted() {
+    this.axios.interceptors.request.use((config) => {
+      if (config && config.headers) {
+        const token = this.$store.getters.token;
+        config.headers.Authorization = token ? `Bearer ${token}` : "";
+      }
+
+      return config;
+    });
+  }
 });
 </script>
 

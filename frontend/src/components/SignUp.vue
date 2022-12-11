@@ -99,8 +99,8 @@ export default defineComponent({
           logger.debug(`Succesfully created user: ${this.username}`);
           this.$router.push({ name: "home" });
         })
-        .catch(() => {
-          console.error("Unable to log in");
+        .catch((err) => {
+          logger.error("Unable ot create new account", err)
         });
     },
   },

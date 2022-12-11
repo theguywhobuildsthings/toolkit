@@ -11,18 +11,6 @@ from backend.models import schemas
 
 logger = logging.getLogger('output')
 
-def __schema_pair_from_db_pair(db_pair: Pair) -> schemas.Pair:
-    db = database.SessionLocal()
-    try:
-        db_user: db.User = db_pair.user
-        schema_user = schemas.User(id=db_user.id, username=db_user.username)
-        for db_pair in db_user.pairs:
-            schema_pair = schemas.Pair(id=db_pair.id, uuid=db_pair.uuid, user=schema_user, pair_status=db_pair.status)
-            schema_user.pairs.append(schema_pair)
-        return schema_pair
-    finally:
-        db.close()
-
 class PairRepository:
     def get_pair_by_uuid(self, uuid: uuid.UUID) -> schemas.Pair:
         db = database.SessionLocal()
@@ -31,16 +19,15 @@ class PairRepository:
             db_pair = db.query(Pair).filter(Pair.uuid == uuid).first()
         finally:
             db.close()
-        user = __schema_pair_from_db_pair(db_pair)
+        user = schemas.Pair.from_orm(db_pair)
         return user
         
     def create_pair(self, user: schemas.User, pair: schemas.Pair) -> schemas.Pair:
-        logger.debug(f'Creating pair for user: {user.id} ({user.username}) - {pair.uuid}')
+        logger.debug(f'Creating pair for user: {user.id} ({user.username}) - {pair.uuid}: {pair.pair_status}')
         conn = database.SessionLocal()
         try:
             db_user = self.__get_user_by_id(conn, user.id)
-            logger.debug(db_user.username)
-            db_pair = db.Pair(uuid=pair.uuid, user=db_user, status=pair.pair_status)
+            db_pair = db.Pair(uuid=pair.uuid, user=db_user, pair_status=pair.pair_status)
             db_user.pairs.append(db_pair)
             conn.add(db_pair)
             conn.merge(db_user)
@@ -48,7 +35,7 @@ class PairRepository:
             conn.refresh(db_pair)
         finally:
             conn.close()
-        return schemas.Pair(id=db_pair.id, uuid=db_pair.uuid, user=user, pair_status=db_pair.status)
+        return schemas.Pair.from_orm(db_pair)
         
     def __get_user_by_id(self, conn: database.SessionLocal, user_id: schemas.User) -> db.User:
         db_user: db.User = None

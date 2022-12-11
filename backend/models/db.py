@@ -27,5 +27,5 @@ class Pair(Base):
     uuid = Column(String)
     user_id = Column(Integer, ForeignKey("users.id"))
     user = relationship("User", back_populates="pairs", lazy='immediate')
-    status = Column(Enum(PairStatus))
+    pair_status = Column(Enum(PairStatus))
 

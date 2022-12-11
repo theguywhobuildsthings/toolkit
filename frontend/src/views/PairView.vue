@@ -86,7 +86,7 @@ export default defineComponent({
     this.axios({
       method: "get",
       headers: {
-        Authorization: `Bearer ${this.$store.getters.token}`,
+        // Authorization: `Bearer ${this.$store.getters.token}`,
       },
       url: "http://localhost:8000/pair/list",
     }).then((res) => {
