@@ -35,7 +35,7 @@ async def test_success_verify_token():
 
     verified_user = await serve.get_current_user(encoded, mock_user_repo)
 
-    assert verified_user.username == test_users.db_user_1.username, "Should verify token as valid"
+    assert verified_user == test_users.db_user_1, "Should verify token as valid"
 
 @pytest.mark.asyncio
 async def test_verify_unsuccessful_token():
@@ -59,6 +59,6 @@ async def test_verify_invalid_token():
         data = {"sub": test_users.db_user_1.username}
         encoded = serve.create_access_token(data, key="fake_secret")
 
-        print(await serve.get_current_user(encoded, repo=mock_user_repo))
+        await serve.get_current_user(encoded, repo=mock_user_repo)
 
     assert e.value.status_code == 401, "Should raise 401 exception for client"

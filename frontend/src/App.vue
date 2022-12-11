@@ -28,7 +28,7 @@ export default defineComponent({
 
       return config;
     });
-  }
+  },
 });
 </script>
 

@@ -16,10 +16,9 @@ class UserRepository:
         user: User = None
         try:
             user = db.query(User).filter(User.username == username).first()
-            logger.debug(f'Getting user by username: {username} - Returning {user}')
+            return schemas.User.from_orm(user)
         finally:
             db.close()
-        return user
 
     def create_user(self, user: schemas.UserCreate) -> schemas.User:
         db = database.SessionLocal()

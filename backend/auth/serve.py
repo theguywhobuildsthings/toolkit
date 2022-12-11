@@ -58,7 +58,7 @@ async def get_current_user(token: str = Depends(oauth2_scheme), repo = UserRepos
     user = repo.get_user_by_username(token_data.username)
     if user is None:
         raise credentials_exception
-    return schemas.User.from_orm(user)
+    return user
 
 
 @router.post("/token", response_model=Token)
@@ -80,4 +80,4 @@ async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(
 
 @router.head("/status")
 async def get_auth_status(user = Depends(get_current_user)):
-    return user
+    return {"message": "success"}

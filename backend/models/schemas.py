@@ -1,4 +1,4 @@
-from typing import Any, Optional
+from typing import Any, Optional, List
 from pydantic import BaseModel
 
 from backend.models.db import PairStatus
@@ -12,7 +12,6 @@ class UserCreate(UserBase):
 class Pair(BaseModel):
     id: Optional[int]
     uuid: str
-    user: Any
     pair_status: PairStatus
     
     class Config:
@@ -20,7 +19,7 @@ class Pair(BaseModel):
 
 class User(UserBase):
     id: int
-    pairs: Optional[list[Pair]]
+    pairs: List[Pair]
 
     class Config:
         orm_mode = True

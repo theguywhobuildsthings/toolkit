@@ -7,7 +7,6 @@ import mixinTitle from "./mixins/title";
 import axios from "axios";
 import VueAxios from "vue-axios";
 
-
 const app = createApp(App);
 
 app

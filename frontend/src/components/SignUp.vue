@@ -100,7 +100,7 @@ export default defineComponent({
           this.$router.push({ name: "home" });
         })
         .catch((err) => {
-          logger.error("Unable ot create new account", err)
+          logger.error("Unable ot create new account", err);
         });
     },
   },

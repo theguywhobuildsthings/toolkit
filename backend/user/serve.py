@@ -11,6 +11,8 @@ from backend.models.schemas import UserCreate, User
 from backend.models.user.user_repository import UserRepository
 from backend.auth.serve import get_current_user
 
+
+
 router = APIRouter(prefix="/user",)
 
 @router.post("/", response_model=User)
