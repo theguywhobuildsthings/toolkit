@@ -6,6 +6,6 @@
 import { defineComponent } from "vue";
 
 export default defineComponent({
-  title: "Toolkit | Devices",
+  title: "Devices",
 });
 </script>

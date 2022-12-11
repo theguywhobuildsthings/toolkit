@@ -71,6 +71,11 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
+import { createLogger } from "@evilkiwi/logger";
+
+const logger = createLogger({
+  name: "SignUp",
+});
 
 export default defineComponent({
   name: "SignUp",
@@ -91,7 +96,7 @@ export default defineComponent({
         },
       })
         .then(() => {
-          console.log("saving user");
+          logger.debug(`Succesfully created user: ${this.username}`);
           this.$router.push({ name: "home" });
         })
         .catch(() => {

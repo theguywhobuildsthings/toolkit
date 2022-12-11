@@ -6,7 +6,7 @@ import threading
 import json
 import asyncio
 
-from backend.threading.stoppable_thread import StoppableThread
+from backend.threading.redis_message_thread import RedisMessageThread
 
 pool = redis.ConnectionPool(host=os.environ['REDIS_SERVER'], port=os.environ['REDIS_PORT'], db=0)
 
@@ -15,8 +15,8 @@ class ToolkitPubSub:
         testy = redis.Redis()
         testy.publish(id, json.dumps(message))
     
-    def listen_for_message(self, id: str, cb: Callable[[str], Awaitable[None]]) -> StoppableThread:
-        return StoppableThread(id, cb)
+    def listen_for_message(self, id: str, cb: Callable[[str], Awaitable[None]]) -> RedisMessageThread:
+        return RedisMessageThread(id, cb)
         
         
             

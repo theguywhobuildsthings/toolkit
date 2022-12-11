@@ -11,6 +11,6 @@ export default defineComponent({
   components: {
     SignUp,
   },
-  title: "Toolkit | Sign up",
+  title: "Sign up",
 });
 </script>

@@ -7,7 +7,7 @@ from jose import JWTError, jwt
 from passlib.context import CryptContext
 from pydantic import BaseModel
 from backend.auth.user_auth import UserAuth
-from backend.models.user.user_schemas import UserCreate, User
+from backend.models.schemas import UserCreate, User
 from backend.models.user.user_repository import UserRepository
 from backend.auth.serve import get_current_user
 

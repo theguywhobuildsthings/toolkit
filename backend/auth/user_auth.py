@@ -1,5 +1,5 @@
 from backend.models.user.user_repository import UserRepository
-from backend.models.user.user import User
+from backend.models.db import User
 
 from passlib.context import CryptContext
 

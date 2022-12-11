@@ -3,12 +3,12 @@ from backend.user.serve import router as user_router
 from backend.pair.serve import router as pair_router
 
 from fastapi import FastAPI
-from backend.models.user import user
+from backend.models import db
 from backend.db import database
 from fastapi.middleware.cors import CORSMiddleware
 import logging
 
-user.Base.metadata.create_all(bind=database.engine)
+db.Base.metadata.create_all(bind=database.engine)
 
 def setup_custom_logger():
     formatter = logging.Formatter(fmt='%(asctime)s - %(levelname)s - %(module)s - %(message)s')

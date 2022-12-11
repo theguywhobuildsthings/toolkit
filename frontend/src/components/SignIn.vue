@@ -72,6 +72,11 @@
 </template>
 <script lang="ts">
 import { defineComponent } from "vue";
+import { createLogger } from "@evilkiwi/logger";
+
+const logger = createLogger({
+  name: "SignIn",
+});
 
 export default defineComponent({
   name: "SignIn",
@@ -95,7 +100,9 @@ export default defineComponent({
         data: bodyFormData,
       })
         .then((res) => {
-          console.log("saving");
+          logger.debug(
+            `Succesfully signed in.  Saving token: ${res.data.access_token}`
+          );
           localStorage.auth_token = res.data.access_token;
           this.$store.dispatch("setToken", res.data.access_token);
           this.$router.push({ name: "home" });

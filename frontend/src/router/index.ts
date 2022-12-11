@@ -3,6 +3,11 @@ import HomeView from "../views/HomeView.vue";
 import PairView from "../views/PairView.vue";
 import DevicesView from "../views/DevicesView.vue";
 import { checkToken } from "@/utils/auth";
+import { createLogger } from "@evilkiwi/logger";
+
+const logger = createLogger({
+  name: "router",
+});
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -46,7 +51,7 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
   if (to.matched.some((record) => record.meta.requiresAuth)) {
     if (localStorage.getItem("auth_token") == null) {
-      console.log("No token");
+      logger.debug(`No token in localstorage.  User is not signed in`);
       next({
         path: "/sign-in",
         params: { nextUrl: to.fullPath },
@@ -54,10 +59,10 @@ router.beforeEach((to, from, next) => {
     } else {
       checkToken().then((isValid) => {
         if (isValid) {
-          console.log("Valid Token");
+          logger.debug(`Checked token, it is valid.  You are signed in.`);
           next();
         } else {
-          console.log("Invalid Token");
+          logger.debug(`Token is invalid.`);
           next({
             path: "/sign-in",
             params: { nextUrl: to.fullPath },

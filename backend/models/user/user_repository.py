@@ -1,30 +1,36 @@
-from sqlalchemy.orm import Session
+import logging
 
-from .user import User
-from .user_schemas import UserCreate
+from sqlalchemy.orm import Session
+from backend.models.db import User
 from backend.db import database 
 from passlib.context import CryptContext
+from backend.models import schemas
 
+logger = logging.getLogger('output')
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 class UserRepository:
-    def get_user_by_username(self, username: str) -> User:
+    def get_user_by_username(self, username: str) -> schemas.User:
+        logger.debug(f'Getting user by username: {username}')
         db = database.SessionLocal()
         user: User = None
         try:
             user = db.query(User).filter(User.username == username).first()
+            logger.debug(f'Getting user by username: {username} - Returning {user}')
         finally:
             db.close()
         return user
 
-    def create_user(self, user: UserCreate) -> User:
+    def create_user(self, user: schemas.UserCreate) -> schemas.User:
         db = database.SessionLocal()
         try:
             hashed_password = pwd_context.hash(user.password)
-            db_user = User(username=user.username, password=hashed_password)
+            db_user = User(username=user.username.lower(), password=hashed_password)
+            db_user.pairs = []
             db.add(db_user)
             db.commit()
             db.refresh(db_user)
+
         finally:
             db.close()
         return db_user

@@ -9,7 +9,7 @@ export default {
   mounted() {
     const title = getTitle(this);
     if (title) {
-      document.title = title;
+      document.title = "Toolkit | " + title;
     }
   },
 };

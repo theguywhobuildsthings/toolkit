@@ -9,7 +9,7 @@ import logging
 
 logger = logging.getLogger('output')
 
-class StoppableThread(threading.Thread):
+class RedisMessageThread(threading.Thread):
     id: str
     cb: Callable[[str], Awaitable[None]]
 
@@ -32,17 +32,13 @@ class StoppableThread(threading.Thread):
         while True:
             message = channel.get_message()
             if message and message is not None and isinstance(message, dict):
-                logger.debug(f'Received message: { message.get("data") } ')
+                logger.debug(f'Received message: { message } ')
                 if message['type'] == 'message':
                     decoded_data = json.loads(message.get('data').decode("utf-8"))
-                    if decoded_data['message'] == 'pair-confirm':
-                        loop = asyncio.new_event_loop()
-                        asyncio.set_event_loop(loop)
-
-                        loop.run_until_complete(self.cb(decoded_data))
-                        loop.close()
-                    if 'exit_flow' in decoded_data and decoded_data['exit_flow'] == True:
-                        return
+                    loop = asyncio.new_event_loop()
+                    asyncio.set_event_loop(loop)
+                    loop.run_until_complete(self.cb(self, decoded_data))
+                    loop.close()
             if self.stopped():
                 logger.debug(f'Detected stop for thread {self.id}, dying')
                 return
