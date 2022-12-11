@@ -9,10 +9,10 @@ class UserAuth:
     user: User
     context: CryptContext
 
-    def __init__(self, username: str, unhashed_pass: str):
+    def __init__(self, username: str, unhashed_pass: str, user_repo = UserRepository()):
         self.username = username
         self.password = unhashed_pass
-        user_repository = UserRepository()
+        user_repository = user_repo
         self.user = user_repository.get_user_by_username(self.username)
         self.context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 

@@ -11,6 +11,7 @@ from backend.models.schemas import UserCreate, User
 from backend.models.user.user_repository import UserRepository
 from datetime import datetime, timedelta
 from backend.models import db
+from backend.models import schemas
 
 logger = logging.getLogger('output')
 
@@ -39,7 +40,7 @@ def create_access_token(data: dict, expires_delta: timedelta | None = None):
     encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
     return encoded_jwt
 
-async def get_current_user(token: str = Depends(oauth2_scheme)) -> User:
+async def get_current_user(token: str = Depends(oauth2_scheme)) -> schemas.User:
     logger.debug(f'Getting current user from {token}')
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
@@ -55,10 +56,9 @@ async def get_current_user(token: str = Depends(oauth2_scheme)) -> User:
     except JWTError:
         raise credentials_exception
     user = UserRepository().get_user_by_username(token_data.username)
-    # output_user = User(username=user.username, id=user.id)
     if user is None:
         raise credentials_exception
-    return user
+    return schemas.User.from_orm(user)
 
 
 @router.post("/token", response_model=Token)
