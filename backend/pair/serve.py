@@ -61,11 +61,14 @@ async def websocket_endpoint(websocket: WebSocket, token: str):
         try:
             logger.debug(f'Closing Pairing Websocket for {user.id} ({user.username}) - {pair_uid}')
             await websocket.close()
-        except:
+        except Exception as e:
+            logger.error("Error while closing websocket")
+            logger.error(e)
             pass
         try:
             logger.debug(f'Closing Pairing Thread for {user.id} ({user.username}) - {pair_uid}')
             thread.stop()
         except Exception as e:
+            logger.error("Error while killing thread.")
             logger.error(e)
             pass

@@ -1,6 +1,5 @@
 import time
 from typing import Awaitable, Callable
-from fastapi import WebSocket
 import redis
 import os
 import threading
@@ -16,17 +15,18 @@ import asyncio
 import logging
 
 logger = logging.getLogger('output')
-
 pool = redis.ConnectionPool(host=os.environ['REDIS_SERVER'], port=os.environ['REDIS_PORT'], db=0)
 
 class RedisMessageThread(threading.Thread):
     id: str
     cb: Callable[[str], Awaitable[None]]
+    redis: redis.Redis
 
-    def __init__(self, id: str, cb: Callable[[str], Awaitable[None]]):
+    def __init__(self, id: str, cb: Callable[[str], Awaitable[None]], redis = redis.Redis()):
         threading.Thread.__init__(self)
         self.cb = cb
         self.id = id
+        self.redis = redis
         self._stop_event = threading.Event()
 
     def stop(self):
@@ -36,8 +36,7 @@ class RedisMessageThread(threading.Thread):
         return self._stop_event.is_set()
 
     def run(self):
-        testy = redis.Redis()
-        channel = testy.pubsub()
+        channel = self.redis.pubsub()
         channel.subscribe(self.id)
         while True:
             message = channel.get_message()
@@ -56,8 +55,8 @@ class RedisMessageThread(threading.Thread):
 
 class ToolkitPubSub:
     async def send_message(self, id: str, message):
-        testy = redis.Redis()
-        testy.publish(id, json.dumps(message))
+        r = redis.Redis()
+        r.publish(id, json.dumps(message))
     
     def listen_for_message(self, id: str, cb: Callable[[str], Awaitable[None]]) -> RedisMessageThread:
         return RedisMessageThread(id, cb)
