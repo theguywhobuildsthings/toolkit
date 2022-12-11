@@ -15,11 +15,12 @@
         >
       </a>
       <button
-        data-collapse-toggle="navbar-default"
+        data-bs-toggle="collapse"
+        data-bs-target="#navbar-default"
+        aria-expanded="false" 
+        aria-controls="navbar-default"
         type="button"
         class="inline-flex items-center p-2 ml-3 text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
-        aria-controls="navbar-default"
-        aria-expanded="false"
       >
         <span class="sr-only">Open main menu</span>
         <svg
@@ -36,27 +37,22 @@
           ></path>
         </svg>
       </button>
-      <div class="hidden w-full md:block md:w-auto" id="navbar-default">
+      <div
+        class="invisible md:visible w-full md:block md:w-auto"
+        id="navbar-default"
+      >
         <ul
           v-if="!loggedIn"
           class="flex flex-col p-4 mt-4 border border-gray-100 rounded-lg bg-base md:flex-row md:space-x-8 md:mt-0 md:text-sm md:font-medium md:border-0 md:base dark:base md:dark:base dark:border-gray-700"
         >
           <li>
-            <a
-              href="#"
-              class="block py-2 pl-3 pr-4 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0 dark:text-white"
-              aria-current="page"
-              >Home</a
-            >
-          </li>
-          <!-- <li>
             <router-link
               class="block py-2 pl-3 pr-4 text-contrast bg-base rounded md:bg-transparent md:text-contrast md:p-0 dark:text-white hover:bg-base2"
               aria-current="page"
               to="/sign-in"
               >Sign In</router-link
             >
-          </li> -->
+          </li>
         </ul>
         <ul
           v-if="loggedIn"
@@ -95,6 +91,7 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import { checkToken } from "@/utils/auth";
+import 'tw-elements';
 
 export default defineComponent({
   name: "NavBar",
