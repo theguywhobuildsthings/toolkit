@@ -30,17 +30,17 @@ class Token(BaseModel):
 class TokenData(BaseModel):
     username: str | None = None
 
-def create_access_token(data: dict, expires_delta: timedelta | None = None):
+def create_access_token(data: dict, expires_delta: timedelta | None = None, key: str = SECRET_KEY):
     to_encode = data.copy()
     if expires_delta:
         expire = datetime.utcnow() + expires_delta
     else:
         expire = datetime.utcnow() + timedelta(minutes=15)
     to_encode.update({"exp": expire})
-    encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
+    encoded_jwt = jwt.encode(to_encode, key, algorithm=ALGORITHM)
     return encoded_jwt
 
-async def get_current_user(token: str = Depends(oauth2_scheme)) -> schemas.User:
+async def get_current_user(token: str = Depends(oauth2_scheme), repo = UserRepository()) -> schemas.User:
     logger.debug(f'Getting current user from {token}')
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
@@ -55,7 +55,7 @@ async def get_current_user(token: str = Depends(oauth2_scheme)) -> schemas.User:
         token_data = TokenData(username=username)
     except JWTError:
         raise credentials_exception
-    user = UserRepository().get_user_by_username(token_data.username)
+    user = repo.get_user_by_username(token_data.username)
     if user is None:
         raise credentials_exception
     return schemas.User.from_orm(user)
