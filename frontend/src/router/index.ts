@@ -2,6 +2,7 @@ import { createRouter, createWebHashHistory, RouteRecordRaw } from "vue-router";
 import HomeView from "../views/HomeView.vue";
 import PairView from "../views/PairView.vue";
 import DevicesView from "../views/DevicesView.vue";
+import DeviceDetailsView from "../views/DeviceDetailsView.vue";
 import { checkToken } from "@/utils/auth";
 import { createLogger } from "@evilkiwi/logger";
 
@@ -30,6 +31,14 @@ const routes: Array<RouteRecordRaw> = [
     meta: {
       requiresAuth: true,
     },
+  },
+  {
+    path: '/device/:id',
+    component: DeviceDetailsView,
+    props: true,
+    meta: {
+      requiresAuth: true,
+    }
   },
   {
     path: "/sign-in",

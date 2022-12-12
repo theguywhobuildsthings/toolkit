@@ -23,7 +23,7 @@ import PairComplete from "@/components/pair/PairComplete.vue";
 import { createLogger } from "@evilkiwi/logger";
 
 const logger = createLogger({
-  name: "router",
+  name: "pair-view",
 });
 
 export default defineComponent({
@@ -57,15 +57,6 @@ export default defineComponent({
   },
 
   created: function () {
-    this.axios({
-      method: "get",
-      headers: {
-        // Authorization: `Bearer ${this.$store.getters.token}`,
-      },
-      url: "http://localhost:8000/pair/list",
-    }).then((res) => {
-      logger.info("re: ", res);
-    });
     const setQrValue = (val: string) => {
       this.updateQRData(val);
     };

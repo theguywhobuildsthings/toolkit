@@ -36,7 +36,7 @@ async def status(uid: str):
 @router.get("/list")
 async def list_pairs_for_user(user: schemas.User = Depends(get_current_user)):
     logger.debug(f"Getting list of pairs for user {user.id} ({user.username})")
-    return user
+    return user.pairs
     
 
 @router.get("/start/{uid}")
