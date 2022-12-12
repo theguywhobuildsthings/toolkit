@@ -18,14 +18,16 @@ async def handle_ws_request(data, uid: uuid.UUID, user: schemas.User, pair_repo:
 
 def pair_handling_factory(websocket: WebSocket):
     async def handle_pairing_message(thread: RedisMessageThread, decoded_data: Any):
-        logger.debug(f'Received pairing message for { decoded_data["data"]["pairing_id"] }')
-        if decoded_data['category'] == 'pairing':
-            if decoded_data['message'] == 'pair-confirm':
-                await websocket.send_json({"message": 'pair-complete'})
-            if decoded_data['message'] == 'pair-start':
-                await websocket.send_json({"message": 'pair-start'})
-            if 'data' in decoded_data and 'exit_flow' in decoded_data['data'] and decoded_data['data']['exit_flow'] == True:
-                thread.stop()
-                return
+        if decoded_data and 'category' in decoded_data and decoded_data['category'] == 'pairing':
+            if 'data' in decoded_data and 'pairing_id' in decoded_data['data']:
+                logger.debug(f'Received pairing message of type: { decoded_data["category"] } for { str(decoded_data["data"]["pairing_id"]) }')
+                if decoded_data['category'] == 'pairing' and 'message' in decoded_data:
+                    if decoded_data['message'] == 'pair-confirm':
+                        await websocket.send_json({"message": 'pair-complete'})
+                    if decoded_data['message'] == 'pair-start':
+                        await websocket.send_json({"message": 'pair-start'})
+                    if 'exit_flow' in decoded_data['data'] and decoded_data['data']['exit_flow'] == True:
+                        thread.stop()
+                        return
     return handle_pairing_message
 

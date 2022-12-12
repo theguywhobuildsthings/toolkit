@@ -25,3 +25,10 @@ class RedisChannelMock:
     def clear(self) -> None:
         self.channel = ""
         self.message = {}
+
+class RedisMessageThreadMock:
+    def start():
+        pass
+
+    def stop():
+        pass
