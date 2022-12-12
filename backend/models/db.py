@@ -19,6 +19,7 @@ class PairStatus(enum.Enum):
     unpaired = 'unpaired'
     pair_started = 'pair_started'
     paired = 'paired'
+    failed = 'failed'
 
 class Pair(Base):
     __tablename__ = "pair"
