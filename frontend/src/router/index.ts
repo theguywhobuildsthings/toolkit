@@ -33,12 +33,12 @@ const routes: Array<RouteRecordRaw> = [
     },
   },
   {
-    path: '/device/:id',
+    path: "/device/:id",
     component: DeviceDetailsView,
     props: true,
     meta: {
       requiresAuth: true,
-    }
+    },
   },
   {
     path: "/sign-in",

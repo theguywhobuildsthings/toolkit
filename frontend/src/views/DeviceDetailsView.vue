@@ -1,13 +1,13 @@
 <template>
-    <h1>{{id}}</h1>
+  <h1>{{ id }}</h1>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent } from "vue";
 
 export default defineComponent({
-    props: {
-        id: String
-    }
-})
+  props: {
+    id: String,
+  },
+});
 </script>

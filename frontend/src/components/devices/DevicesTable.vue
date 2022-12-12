@@ -1,34 +1,34 @@
 <template>
-    <div class="w-full justify-center">
-        <h2
-        class="mt-6 text-center text-3xl font-bold tracking-tight text-contrast pb-8"
-      >
-        Devices
-      </h2>
-<div class="container border rounded border-accent">
-
-	<table class="text-left w-full">
-		<thead class="bg-base border-b border-accent flex text-white w-full">
-			<tr class="flex w-full mb-1">
-				<th class="p-4 w-1/3">User Name</th>
-				<th class="p-4 w-1/3">Status</th>
-				<th class="p-4 w-1/3"></th>
-			</tr>
-		</thead>
-		<tbody class="flex flex-col items-center overflow-y-scroll w-full" style="height: 50vh;">
-            <device-row 
-                v-for="device in devices"
-                :key="device.uuid"
-                :id="device.uuid"
-                :username="device.username"
-                :status="device.pair_status"
-            ></device-row>
-		</tbody>
-	</table>
-</div>
-</div>
-
-
+  <div class="w-full justify-center">
+    <h2
+      class="mt-6 text-center text-3xl font-bold tracking-tight text-contrast pb-8"
+    >
+      Devices
+    </h2>
+    <div class="container border rounded border-accent">
+      <table class="text-left w-full">
+        <thead class="bg-base border-b border-accent flex text-white w-full">
+          <tr class="flex w-full mb-1">
+            <th class="p-4 w-1/4">User Name</th>
+            <th class="p-4 w-1/4">Status</th>
+            <th class="p-4 w-1/4"></th>
+          </tr>
+        </thead>
+        <tbody
+          class="bg-grey-light flex flex-col items-center justify-between overflow-y-scroll w-full"
+          style="height: 50vh"
+        >
+          <device-row
+            v-for="device in devices"
+            :key="device.uuid"
+            :id="device.uuid"
+            :username="device.username"
+            :status="device.pair_status"
+          ></device-row>
+        </tbody>
+      </table>
+    </div>
+  </div>
 
   <!-- <div class="container w-100">
     <div class=" flex mx-0 overflow-hidden rounded-lg border border-strong">
@@ -112,7 +112,7 @@
                 <var>v</var>
             </tbody>
         </table> -->
-        <!-- <table>
+  <!-- <table>
         <thead class="border-b border-strong bg-base-dark">
             <tr>
             <th
@@ -126,8 +126,8 @@
         <tbody>
         </tbody>
     </table> -->
-    <!-- </div> -->
-      <!-- <div class="py-2 inline-block min-w-full sm:px-6 lg:px-8">
+  <!-- </div> -->
+  <!-- <div class="py-2 inline-block min-w-full sm:px-6 lg:px-8">
         <div class="">
           <table class="min-w-full bg-base-dark">
             
@@ -144,10 +144,10 @@ import { defineComponent, PropType } from "vue";
 import DeviceRow from "./DeviceRow.vue";
 
 interface Device {
-    id: Number,
-    uuid: string,
-    username?: string,
-    pair_status: string
+  id: number;
+  uuid: string;
+  username?: string;
+  pair_status: string;
 }
 
 export default defineComponent({
@@ -155,7 +155,7 @@ export default defineComponent({
     DeviceRow,
   },
   props: {
-    devices: Array as PropType<Array<Device>>
-  }
+    devices: Array as PropType<Array<Device>>,
+  },
 });
 </script>

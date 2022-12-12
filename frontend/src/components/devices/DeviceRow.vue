@@ -6,13 +6,15 @@
     <td class="w-1/3 text-accent font-light px-6 py-4 whitespace-nowrap">
       {{ statusText }}
     </td>
-    <td class="w-1/3 text-accent font-light px-6 py-4 whitespace-nowrap text-center">
-        <router-link 
-            class="bg-transparent hover:bg-base font-semibold hover:text-contrast py-2 px-4 border border-strong rounded"
-            :to="`/device/${id}`"
-        >
-            Manage
-        </router-link>
+    <td
+      class="w-1/3 text-accent font-light px-6 py-4 whitespace-nowrap text-center"
+    >
+      <router-link
+        class="bg-transparent hover:bg-base font-semibold hover:text-contrast py-2 px-4 border border-strong rounded"
+        :to="`/device/${id}`"
+      >
+        Manage
+      </router-link>
     </td>
   </tr>
 </template>
