@@ -16,5 +16,7 @@ jobs:
         uses: actions/setup-python@v3
       - name: Poetry
         uses: abatilo/actions-poetry@v2
-      - name: View poetry --help
-        run: poetry --help
+      - name: Install app
+        run: poetry install
+      - name: Test
+        run: poetry run python -m pytest -v
