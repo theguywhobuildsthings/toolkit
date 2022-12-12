@@ -11,12 +11,15 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 class UserRepository:
     def get_user_by_username(self, username: str) -> schemas.User:
-        logger.debug(f'Getting user by username: {username}')
+        return schemas.User.from_orm(self.get_db_user_by_username(username))
+
+    def get_db_user_by_username(self, username: str) -> schemas.User:
+        logger.debug(f'Getting db user by username: {username}')
         db = database.SessionLocal()
         user: User = None
         try:
             user = db.query(User).filter(User.username == username).first()
-            return schemas.User.from_orm(user)
+            return user
         finally:
             db.close()
 

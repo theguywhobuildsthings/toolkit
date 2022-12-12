@@ -1,3 +1,4 @@
+from backend.models import schemas
 from backend.models.user.user_repository import UserRepository
 from backend.models.db import User
 
@@ -13,7 +14,7 @@ class UserAuth:
         self.username = username
         self.password = unhashed_pass
         user_repository = user_repo
-        self.user = user_repository.get_user_by_username(self.username)
+        self.user = user_repository.get_db_user_by_username(self.username)
         self.context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
     def verify_password(self, plain_password: str, hashed_password: str):
@@ -26,9 +27,9 @@ class UserAuth:
     def __authenticate(self) -> bool:
         return self.verify_password(self.password, self.user.password)
 
-    def get_authenticated_user(self) ->  User:
+    def get_authenticated_user(self) ->  schemas.User:
         if self.user == None or not self.__authenticate():
             return None
-        return self.user
+        return schemas.User.from_orm(self.user)
 
         
