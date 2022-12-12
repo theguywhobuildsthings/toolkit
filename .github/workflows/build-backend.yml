@@ -22,6 +22,6 @@ jobs:
         run: poetry run python -m pytest -v
         env:
           DB_URL: "sqlite:///./sql_app.db"
-          SECRET_KEY: 45dfea52c615049c2172da5fc2e0bd11f849d33a99fea563657bab043dbfc900
+          SECRET_KEY: test_key
           REDIS_SERVER: "localhost"
           REDIS_PORT: 6379
