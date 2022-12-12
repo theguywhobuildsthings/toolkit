@@ -68,3 +68,14 @@ class PairRepository:
                 self.__update_status(pair_id, PairStatus.failed)
             finally:
                 return False
+
+    def pair_exists(self, uuid: str) -> bool:
+        conn = database.SessionLocal()
+        db_pair: db.Pair = None
+        try:
+            db_pair = conn.query(Pair).filter(Pair.uuid == str(uuid)).first()
+            if not db_pair:
+                return False
+            return True
+        finally:
+            conn.close()

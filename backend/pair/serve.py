@@ -3,7 +3,8 @@ import threading
 import logging
 
 from backend.auth.serve import get_current_user
-from fastapi import APIRouter, Depends, WebSocket, WebSocketDisconnect
+from fastapi import APIRouter, Depends, HTTPException, WebSocket, WebSocketDisconnect
+from fastapi import status as http_status
 from backend.models.db import User
 from backend.models.pair.pair_repository import PairRepository
 from backend.models import schemas
@@ -15,8 +16,16 @@ from typing import Any
 logger = logging.getLogger('output')
 router = APIRouter(prefix="/pair")
 
+def ensure_pair_exists(uid: str):
+    if not PairRepository().pair_exists(uid):
+        raise HTTPException(
+            status_code=http_status.HTTP_404_NOT_FOUND,
+            detail="Pair request not found",
+        )
+
 @router.get("/complete/{uid}")
 async def status(uid: str):
+    ensure_pair_exists(uid)
     logger.info("Pairing: " + uid)
     pub = ToolkitPubSub()
     await pub.send_message(uid, message=
@@ -32,6 +41,7 @@ async def list_pairs_for_user(user: schemas.User = Depends(get_current_user)):
 
 @router.get("/start/{uid}")
 async def status(uid: str):
+    ensure_pair_exists(uid)
     logger.info("Pairing: " + uid)
     pub = ToolkitPubSub()
     await pub.send_message(uid, message=
