@@ -1,5 +1,5 @@
 import time
-from typing import Awaitable, Callable
+from typing import Any, Awaitable, Callable
 import redis
 import os
 import threading
@@ -19,10 +19,10 @@ pool = redis.ConnectionPool(host=os.environ['REDIS_SERVER'], port=os.environ['RE
 
 class RedisMessageThread(threading.Thread):
     id: str
-    cb: Callable[[str], Awaitable[None]]
+    cb: Callable[["RedisMessageThread", Any], Awaitable[None]]
     redis: redis.Redis
 
-    def __init__(self, id: str, cb: Callable[[str], Awaitable[None]], redis = redis.Redis()):
+    def __init__(self, id: str, cb: Callable[["RedisMessageThread", Any], Awaitable[None]], redis = redis.Redis()):
         threading.Thread.__init__(self)
         self.cb = cb
         self.id = id

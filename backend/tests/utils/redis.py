@@ -1,5 +1,10 @@
 from typing import Any
+from unittest.mock import Mock
 
+def make_coroutine(mock: Mock):
+    async def coroutine(*args, **kwargs):
+        return mock(*args, **kwargs)
+    return coroutine
 
 class RedisChannelMock:
     channel: str
