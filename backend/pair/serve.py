@@ -20,7 +20,7 @@ async def status(uid: str):
     logger.info("Pairing: " + uid)
     pub = ToolkitPubSub()
     await pub.send_message(uid, message=
-            {"category": "pairing", "message": "pair-confirm", "data": {"exit_flow": True, "pairing_id": uid}}
+            {"category": "pairing", "message": "pair-confirm", "data": {"exit_flow": True, "pair_id": uid}}
     )
     return {"status": "success"}
 
@@ -35,7 +35,7 @@ async def status(uid: str):
     logger.info("Pairing: " + uid)
     pub = ToolkitPubSub()
     await pub.send_message(uid, message=
-            {"category": "pairing", "message": "pair-start", "data": {"exit_flow": False, "pairing_id": uid}}
+            {"category": "pairing", "message": "pair-start", "data": {"exit_flow": False, "pair_id": uid}}
     )
     return {"status": "success"}
 
