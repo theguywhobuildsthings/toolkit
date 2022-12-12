@@ -9,8 +9,8 @@ import logging
 logger = logging.getLogger('output')
 
 async def handle_ws_request(data, uid: uuid.UUID, user: schemas.User, pair_repo: PairRepository = PairRepository()) -> Any:
-    if data['type'] == 'request':
-        if data['request']['type'] == 'pair-data':
+    if data and data['type'] == 'request':
+        if 'request' in data and 'type' in data['request'] and data['request']['type'] == 'pair-data':
             p = schemas.Pair(user=user, pair_status='unpaired', uuid=str(uid))
             p = pair_repo.create_pair(user, p)
             logger.debug(f"created pair: {p.id} ({p.uuid})")
