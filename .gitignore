@@ -25,4 +25,5 @@ archive.zip
 .*.sw?
 
 .env
+.env.testing
 **/*.db
