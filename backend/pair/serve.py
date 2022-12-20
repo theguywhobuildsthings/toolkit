@@ -13,8 +13,9 @@ from backend.pair.pair_utils import handle_ws_request, pair_handling_factory
 from backend.redis.redis import ToolkitPubSub, RedisMessageThread
 from typing import Any
 
-logger = logging.getLogger('output')
+logger = logging.getLogger("output")
 router = APIRouter(prefix="/pair")
+
 
 def ensure_pair_exists(uid: str):
     if not PairRepository().pair_exists(uid):
@@ -23,33 +24,45 @@ def ensure_pair_exists(uid: str):
             detail="Pair request not found",
         )
 
+
 @router.get("/complete/{uid}")
 async def status(uid: str):
     ensure_pair_exists(uid)
-    logger.info("Pairing: " + uid)
-    pub = ToolkitPubSub()
-    await pub.send_message(uid, message=
-            {"category": "pairing", "message": "pair-confirm", "data": {"exit_flow": True, "pair_id": uid}}
+    logger.info(f"Completing pairing for {uid}")
+    redis_notification_thread = ToolkitPubSub()
+    await redis_notification_thread.send_message(
+        uid,
+        message={
+            "category": "pairing",
+            "message": "pair-confirm",
+            "data": {"exit_flow": True, "pair_id": uid},
+        },
     )
     return {"status": "success"}
+
 
 @router.get("/list")
 async def list_pairs_for_user(user: schemas.User = Depends(get_current_user)):
     logger.debug(f"Getting list of pairs for user {user.id} ({user.username})")
     return user.pairs
-    
+
 
 @router.get("/start/{uid}")
 async def status(uid: str):
     ensure_pair_exists(uid)
-    logger.info("Pairing: " + uid)
-    pub = ToolkitPubSub()
-    await pub.send_message(uid, message=
-            {"category": "pairing", "message": "pair-start", "data": {"exit_flow": False, "pair_id": uid}}
+    logger.info(f"Startirng pairing for {uid}")
+    redis_notification_thread = ToolkitPubSub()
+    await redis_notification_thread.send_message(
+        uid,
+        message={
+            "category": "pairing",
+            "message": "pair-start",
+            "data": {"exit_flow": False, "pair_id": uid},
+        },
     )
     return {"status": "success"}
 
- 
+
 @router.websocket("/{token}")
 async def websocket_endpoint(websocket: WebSocket, token: str):
     thread: threading.Thread = None
@@ -57,7 +70,9 @@ async def websocket_endpoint(websocket: WebSocket, token: str):
     pair_uid = uuid.uuid4()
     try:
         pubsub = ToolkitPubSub()
-        thread = pubsub.listen_for_message(str(pair_uid), pair_handling_factory(websocket))
+        thread = pubsub.listen_for_message(
+            str(pair_uid), pair_handling_factory(websocket)
+        )
         thread.start()
         await websocket.accept()
         while True:
@@ -66,17 +81,21 @@ async def websocket_endpoint(websocket: WebSocket, token: str):
             if return_data:
                 await websocket.send_json(return_data)
     except WebSocketDisconnect:
-        logger.debug(f'Received disconnect for {pair_uid}')
+        logger.debug(f"Received disconnect for {pair_uid}")
     finally:
         try:
-            logger.debug(f'Closing Pairing Websocket for {user.id} ({user.username}) - {pair_uid}')
+            logger.debug(
+                f"Closing Pairing Websocket for {user.id} ({user.username}) - {pair_uid}"
+            )
             await websocket.close()
         except Exception as e:
             logger.error("Error while closing websocket")
             logger.error(e)
             pass
         try:
-            logger.debug(f'Closing Pairing Thread for {user.id} ({user.username}) - {pair_uid}')
+            logger.debug(
+                f"Closing Pairing Thread for {user.id} ({user.username}) - {pair_uid}"
+            )
             thread.stop()
         except Exception as e:
             logger.error("Error while killing thread.")

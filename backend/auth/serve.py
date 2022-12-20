@@ -1,36 +1,40 @@
 import os
 import logging
 
-from fastapi import Depends, HTTPException, status, APIRouter, Response
+from fastapi import Depends, HTTPException, status, APIRouter
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from jose import JWTError, jwt
-from passlib.context import CryptContext
 from pydantic import BaseModel
 from backend.auth.user_auth import UserAuth
-from backend.models.schemas import UserCreate, User
 from backend.models.user.user_repository import UserRepository
 from datetime import datetime, timedelta
-from backend.models import db
 from backend.models import schemas
 
-logger = logging.getLogger('output')
+logger = logging.getLogger("output")
 
-SECRET_KEY = os.environ['SECRET_KEY']
+SECRET_KEY = os.environ["SECRET_KEY"]
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 1440
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/token")
 
-router = APIRouter(prefix="/auth",)
+router = APIRouter(
+    prefix="/auth",
+)
+
 
 class Token(BaseModel):
     access_token: str
     token_type: str
 
+
 class TokenData(BaseModel):
     username: str | None = None
 
-def create_access_token(data: dict, expires_delta: timedelta | None = None, key: str = SECRET_KEY):
+
+def create_access_token(
+    data: dict, expires_delta: timedelta | None = None, key: str = SECRET_KEY
+):
     to_encode = data.copy()
     if expires_delta:
         expire = datetime.utcnow() + expires_delta
@@ -40,8 +44,11 @@ def create_access_token(data: dict, expires_delta: timedelta | None = None, key:
     encoded_jwt = jwt.encode(to_encode, key, algorithm=ALGORITHM)
     return encoded_jwt
 
-async def get_current_user(token: str = Depends(oauth2_scheme), repo = UserRepository()) -> schemas.User:
-    logger.debug(f'Getting current user from {token}')
+
+async def get_current_user(
+    token: str = Depends(oauth2_scheme), repo=UserRepository()
+) -> schemas.User:
+    logger.debug(f"Getting current user from {token}")
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Could not validate credentials",
@@ -62,7 +69,9 @@ async def get_current_user(token: str = Depends(oauth2_scheme), repo = UserRepos
 
 
 @router.post("/token", response_model=Token)
-async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(),):
+async def login_for_access_token(
+    form_data: OAuth2PasswordRequestForm = Depends(),
+):
     auth = UserAuth(form_data.username.lower(), form_data.password)
     user = auth.get_authenticated_user()
     if not user:
@@ -78,6 +87,7 @@ async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(
 
     return {"access_token": access_token, "token_type": "bearer"}
 
+
 @router.head("/status")
-async def get_auth_status(user = Depends(get_current_user)):
+async def get_auth_status(user=Depends(get_current_user)):
     return {"message": "success"}

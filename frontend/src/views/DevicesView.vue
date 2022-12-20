@@ -6,7 +6,6 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
-// import DevicesTable from "@/components/devices/DevicesTable.vue";
 import DeviceCards from "@/components/devices/DeviceCards.vue";
 import { createLogger } from "@evilkiwi/logger";
 
@@ -17,7 +16,6 @@ const logger = createLogger({
 export default defineComponent({
   title: "Devices",
   components: {
-    // DevicesTable,
     DeviceCards,
   },
   data() {

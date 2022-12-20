@@ -1,4 +1,3 @@
-
 import logging
 import uuid
 
@@ -9,7 +8,8 @@ from backend.db import database
 from backend.models import schemas
 
 
-logger = logging.getLogger('output')
+logger = logging.getLogger("output")
+
 
 class PairRepository:
     def get_pair_by_uuid(self, uuid: uuid.UUID) -> schemas.Pair:
@@ -21,23 +21,44 @@ class PairRepository:
             db.close()
         user = schemas.Pair.from_orm(db_pair)
         return user
-        
+
     def create_pair(self, user: schemas.User, pair: schemas.Pair) -> schemas.Pair:
-        logger.debug(f'Creating pair for user: {user.id} ({user.username}) - {pair.uuid}: {pair.pair_status}')
+        logger.debug(
+            f"Creating pair for user: {user.id} ({user.username}) - {pair.uuid}: {pair.pair_status}"
+        )
         conn = database.SessionLocal()
         try:
             db_user = self.__get_user_by_id(conn, user.id)
-            db_pair = db.Pair(uuid=pair.uuid, user=db_user, pair_status=pair.pair_status)
+            db_pair = db.Pair(
+                uuid=pair.uuid, user=db_user, pair_status=pair.pair_status
+            )
             db_user.pairs.append(db_pair)
             conn.add(db_pair)
             conn.merge(db_user)
             conn.commit()
             conn.refresh(db_pair)
+            return schemas.Pair.from_orm(db_pair)
+        finally:
+            conn.close()
+
+    def update_pair(self, pair: schemas.Pair) -> schemas.Pair:
+        logger.debug(f"Updating  pair {pair.uuid}")
+        self.pair_exists(pair)
+        conn = database.SessionLocal()
+        try:
+            db_pair: db.Pair = db.query(Pair).filter(Pair.uuid == uuid).first()
+            db_pair.pair_status = pair.pair_status
+            db_pair.username = pair.username
+            conn.merge(db_pair)
+            conn.commit()
+            conn.refresh(db_pair)
         finally:
             conn.close()
         return schemas.Pair.from_orm(db_pair)
-        
-    def __get_user_by_id(self, conn: database.SessionLocal, user_id: schemas.User) -> db.User:
+
+    def __get_user_by_id(
+        self, conn: database.SessionLocal, user_id: schemas.User
+    ) -> db.User:
         db_user: db.User = None
         try:
             db_user = conn.query(User).filter(User.id == user_id).first()

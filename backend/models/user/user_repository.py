@@ -1,27 +1,35 @@
 import logging
+from pydantic import ValidationError
 
 from sqlalchemy.orm import Session
 from backend.models.db import User
-from backend.db import database 
+from backend.db import database
 from passlib.context import CryptContext
 from backend.models import schemas
 
-logger = logging.getLogger('output')
+logger = logging.getLogger("output")
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+
 
 class UserRepository:
     def get_user_by_username(self, username: str) -> schemas.User:
-        return schemas.User.from_orm(self.get_db_user_by_username(username))
+        try:
+            return schemas.User.from_orm(self.get_db_user_by_username(username))
+        except ValidationError:
+            return None
 
     def get_db_user_by_username(self, username: str) -> schemas.User:
-        logger.debug(f'Getting db user by username: {username}')
+        logger.debug(f"Getting db user by username: {username}")
         db = database.SessionLocal()
         user: User = None
         try:
             user = db.query(User).filter(User.username == username).first()
-            return user
+            if user:
+                logger.debug(f"Found user: {username}({user.id})")
+                return user
         finally:
             db.close()
+        logger.debug(f"Could not find user: {username}")
 
     def create_user(self, user: schemas.UserCreate) -> schemas.User:
         db = database.SessionLocal()

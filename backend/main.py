@@ -10,21 +10,22 @@ import logging
 
 db.Base.metadata.create_all(bind=database.engine)
 
+
 def setup_custom_logger():
-    formatter = logging.Formatter(fmt='%(asctime)s - %(levelname)s - %(module)s - %(message)s')
+    formatter = logging.Formatter(
+        fmt="%(asctime)s - %(levelname)s - %(module)s - %(message)s"
+    )
 
     handler = logging.StreamHandler()
     handler.setFormatter(formatter)
 
-    logger = logging.getLogger('output')
+    logger = logging.getLogger("output")
     logger.setLevel(logging.DEBUG)
     logger.addHandler(handler)
     logger.info("Initialized App")
 
 
 origins = [
-    "http://localhost.tiangolo.com",
-    "https://localhost.tiangolo.com",
     "http://localhost",
     "http://localhost:8080",
 ]
